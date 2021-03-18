@@ -79,9 +79,9 @@ def addListaCategorias(catalog, categoria):
     """
     Adiciona una categoria a la lista de categorias
     """
-    cat = newCategoria(categoria['name'], categoria['id'])
-    mp.put(catalog['categorias'],categoria["name"],cat)
-    mp.put(catalog['traduccion'],categoria["id"],categoria["name"])
+    cat = newCategoria(categoria['name'].strip().lower(), categoria['id'])
+    mp.put(catalog['categorias'],categoria["name"].strip().lower(),cat)
+    mp.put(catalog['traduccion'],categoria["id"],categoria["name"].strip().lower())
 
 def addCategoriaVideo(catalog, nombre_categoria,video):
     """
@@ -167,7 +167,8 @@ def newTrending(video,catalog):
 # Funciones de consulta
 def obtener_videos_categoria(catalog,categoria):
     posvideo = mp.contains(catalog['categorias'], categoria)
-    print(catalog["categorias"])
+    print(mp.keySet(catalog["categorias"]))
+    
     if posvideo:
         pais = mp.get(catalog['categorias'],categoria)
         return me.getValue(pais) 

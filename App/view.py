@@ -65,7 +65,7 @@ def printResults(videos, sample):
             print("Trending date: "+ video["trending_date"]+ ' Titulo: ' + video['title'] + " Canal: "
             + video["channel_title"]+  " Fecha de publicación: "
             + video["publish_time"]+" views: " + video["views"]  + " likes: "+video["likes"] +" dislikes: " +video["dislikes"])
-
+            i+=1
 """
 Menu principal
 """
@@ -85,7 +85,7 @@ while True:
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando videos con más views ....")
         result = controller.sortLikes(catalog,categoria)
-        printResults(result)
+        printResults(result,numeroT)
 
     else:
         sys.exit(0)
