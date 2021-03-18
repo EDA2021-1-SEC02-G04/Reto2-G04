@@ -50,11 +50,11 @@ def newCatalog():
                'categorias': None,'paises': None, 'trending':None}
 
     catalog['videos'] = lt.newList(datastructure="ARRAY_LIST")
-    catalog['categorias'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
-    catalog['paises'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
+    catalog['categorias'] = mp.newMap(100,maptype="CHAINING",loadfactor=4)
+    catalog['paises'] = mp.newMap(15,maptype="CHAINING",loadfactor=4)
     catalog['trending'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
-    catalog['id'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
-    catalog["traduccion"]=mp.newMap(1000,maptype="CHAINING",loadfactor=4)
+    catalog['id'] = mp.newMap(100,maptype="CHAINING",loadfactor=4)
+    catalog["traduccion"]=mp.newMap(100,maptype="CHAINING",loadfactor=4)
     return catalog
 
 
@@ -167,7 +167,7 @@ def newTrending(video,catalog):
 # Funciones de consulta
 def obtener_videos_categoria(catalog,categoria):
     posvideo = mp.contains(catalog['categorias'], categoria)
-    print(mp.keySet(catalog["categorias"]))
+    
     
     if posvideo:
         pais = mp.get(catalog['categorias'],categoria)
