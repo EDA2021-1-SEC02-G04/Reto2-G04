@@ -40,7 +40,7 @@ los mismos.
 # Construccion de modelos
 
 
-def newCatalog(estructura:str):
+def newCatalog():
     """
     Inicializa el catálogo de videos. Crea una lista vacia para guardar
     todos los videos, adicionalmente, crea una lista vacia para las categorias. Retorna el catalogo inicializado.
@@ -48,11 +48,11 @@ def newCatalog(estructura:str):
     catalog = {'videos': None,
                'categorias': None,'paises': None, 'trending':None}
 
-    catalog['videos'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4,comparefunction=)
-    catalog['categorias'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4,comparefunction=)
-    catalog['paises'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4,comparefunction=)
-    catalog['trending'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4,comparefunction=)
-    catalog['id'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4,comparefunction=)
+    catalog['videos'] = lt.newList(datastructure="ARRAY_LIST")
+    catalog['categorias'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
+    catalog['paises'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
+    catalog['trending'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
+    catalog['id'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
     return catalog
 
 
@@ -73,7 +73,7 @@ def addListaCategorias(catalog, categoria):
     Adiciona una categoria a la lista de categorias
     """
     cat = newCategoria(categoria['name'], categoria['id'])
-    lt.addLast(catalog['categorias'], cat)
+    mp.put(catalog['categorias'],categoria["id"],cat)
 
 def addCategoriaVideo(catalog, id_categoria,video):
     """
@@ -81,13 +81,14 @@ def addCategoriaVideo(catalog, id_categoria,video):
     """
     #cat = newCategoria(categoria['name'], categoria['id'])
     #lt.addLast(catalog['categorias'], cat)
-    categorias_lista = catalog['categorias']
-    posvideo = lt.isPresent(categorias_lista, id_categoria)
-    if posvideo > 0:
-        categoria = lt.getElement(categorias_lista, posvideo)
+    categorias_mapa = catalog['categorias']
+    existecat = mp.contains(categorias_mapa, id_categoria)
+    if existecat:
+        categoria = mp.get(categorias_mapa, id_categoria)
+        valor=me.getValue(categoria)
     else:
         categoria = newCategoria(nombre_categoria,id)
-        lt.addLast(categorias_lista, categoria)
+        mp.put(categorias_mapa, categoria,video)
     lt.addLast(categoria['videos'], video)
 
 def addPaisVideo(catalog, nombre_pais, video):
@@ -95,15 +96,16 @@ def addPaisVideo(catalog, nombre_pais, video):
     Adiciona un pais a lista de paises, la cual guarda referencias
     a los videos de dicho pais
     """
-    paises_lista = catalog['paises']
-    posvideo = lt.isPresent(paises_lista, nombre_pais)
-    if posvideo > 0:
-        pais = lt.getElement(paises_lista, posvideo)
+    paises_mapa = catalog['paises']
+    existevid = mp.contains(paises_mapa,nombre_pais)
+    if existevid:
+        pais = mp.get(paises_mapa, nombre_pais)
+        valor=me.getValue(pais)
     else:
         pais = newPais(nombre_pais)
-        lt.addLast(paises_lista, pais)
+        mp.put(paises_mapa, nombre_pais,video)
     lt.addLast(pais['videos'], video)
-
+"""
 def addTrending(trending_lista,video):
     video
     posvideo = lt.isPresent(trending_lista, video)
@@ -116,7 +118,7 @@ def addTrending(trending_lista,video):
     else:
         trending = newTrending(video,trending_lista)
         lt.addLast(trending_lista, trending)
-
+"""
 # Funciones para creacion de datos
 def newCategoria(name, id):
     """
@@ -138,12 +140,12 @@ def newPais(name):
     pais['categorias'] = lt.newList('ARRAY_LIST')
     pais['videos'] = lt.newList('ARRAY_LIST')
     return pais
-
+"""
 def newTrending(video,catalog):
-    """
+    
     Crea una nueva estructura para modelar los libros de
     un autor y su promedio de ratings
-    """
+    
     trending = {'id':None, 'name': None, 'channel':None, "categoria":None, 'pais': None, "trending":None}
     trending['id']=video['video_id']
     trending['name'] = video['title']
@@ -152,6 +154,7 @@ def newTrending(video,catalog):
     trending['pais'] = video['country']
     trending['trending']=1
     return trending
+"""
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista
