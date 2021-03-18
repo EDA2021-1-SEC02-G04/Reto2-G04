@@ -30,6 +30,7 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import mergesort as ms
 assert cf
 
 """
@@ -53,12 +54,16 @@ def newCatalog():
     catalog['paises'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
     catalog['trending'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
     catalog['id'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
+    catalog["traduccion"]=mp.newMap(1000,maptype="CHAINING",loadfactor=4)
     return catalog
 
 
 
 
 # Funciones para agregar informacion al catalogo
+def traduccion(categoria,catalog):
+    x=mp.get(catalog["traduccion"],categoria)
+    return me.getValue(x)
 def addVideo(catalog, video):
     # Se adiciona el video a la lista de videos
     lt.addLast(catalog['videos'], video)
@@ -67,29 +72,30 @@ def addVideo(catalog, video):
     for pais in paises:
         addPaisVideo(catalog, pais.strip(), video)
     for categoria in categorias:
-        addCategoriaVideo(catalog, categoria.strip(), video)
+        tr=traduccion(categoria.strip(),catalog)
+        addCategoriaVideo(catalog, tr, video)
+
 def addListaCategorias(catalog, categoria):
     """
     Adiciona una categoria a la lista de categorias
     """
     cat = newCategoria(categoria['name'], categoria['id'])
-    mp.put(catalog['categorias'],categoria["id"],cat)
+    mp.put(catalog['categorias'],categoria["name"],cat)
+    mp.put(catalog['traduccion'],categoria["id"],categoria["name"])
 
-def addCategoriaVideo(catalog, id_categoria,video):
+def addCategoriaVideo(catalog, nombre_categoria,video):
     """
     Adiciona un categoria a la lista de categorias
     """
     #cat = newCategoria(categoria['name'], categoria['id'])
     #lt.addLast(catalog['categorias'], cat)
+    
     categorias_mapa = catalog['categorias']
-    existecat = mp.contains(categorias_mapa, id_categoria)
+    existecat = mp.contains(categorias_mapa, nombre_categoria)
     if existecat:
-        categoria = mp.get(categorias_mapa, id_categoria)
-        valor=me.getValue(categoria)
-    else:
-        categoria = newCategoria(nombre_categoria,id)
-        mp.put(categorias_mapa, categoria,video)
-    lt.addLast(categoria['videos'], video)
+        pareja = mp.get(categorias_mapa, nombre_categoria)
+        categoria=me.getValue(pareja)
+        lt.addLast(categoria["videos"], video)
 
 def addPaisVideo(catalog, nombre_pais, video):
     """
@@ -99,12 +105,15 @@ def addPaisVideo(catalog, nombre_pais, video):
     paises_mapa = catalog['paises']
     existevid = mp.contains(paises_mapa,nombre_pais)
     if existevid:
-        pais = mp.get(paises_mapa, nombre_pais)
-        valor=me.getValue(pais)
+        pareja = mp.get(paises_mapa, nombre_pais)
+        pais=me.getValue(pareja)
+        lt.addLast(pais["videos"], video)
     else:
         pais = newPais(nombre_pais)
-        mp.put(paises_mapa, nombre_pais,video)
-    lt.addLast(pais['videos'], video)
+        lt.addLast(pais["videos"], video)
+        mp.put(paises_mapa, nombre_pais,pais)
+
+    
 """
 def addTrending(trending_lista,video):
     video
@@ -156,7 +165,31 @@ def newTrending(video,catalog):
     return trending
 """
 # Funciones de consulta
+def obtener_videos_categoria(catalog,categoria):
+    posvideo = mp.contains(catalog['categorias'], categoria)
+    print(catalog["categorias"])
+    if posvideo:
+        pais = mp.get(catalog['categorias'],categoria)
+        return me.getValue(pais) 
+    
+    return None
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
+def cmpVideosByLikes(video1, video2):
+    
+    
+    if (float(video1['likes']) > float(video2['likes'])):
+        return True
+    else:
+        return False
 
 # Funciones de ordenamiento
+def sortLikes(catalog,categoria):
+    
+    categorias=obtener_videos_categoria(catalog,categoria)
+
+    lista_categoria=categorias['videos']
+    
+    sorted_list = ms.sort(lista_categoria, cmpVideosByLikes)
+    return sorted_list

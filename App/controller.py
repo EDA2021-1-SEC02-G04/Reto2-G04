@@ -57,5 +57,6 @@ def loadVideos(catalog):
 
 
 # Funciones de ordenamiento
-
+def sortLikes(catalog,categoria):
+    return model.sortLikes(catalog,categoria)
 # Funciones de consulta sobre el catálogo

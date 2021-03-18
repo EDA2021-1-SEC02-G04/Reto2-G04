@@ -37,7 +37,7 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Los videos con más likes por categoria")
 
 
 def initCatalog():
@@ -54,6 +54,18 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
+
+def printResults(videos, sample):
+    size = lt.size(videos)
+    if size > sample:
+        print("Los ", sample, " videos con más views son:")
+        i=1
+        while i <= sample:
+            video = lt.getElement(videos,i)
+            print("Trending date: "+ video["trending_date"]+ ' Titulo: ' + video['title'] + " Canal: "
+            + video["channel_title"]+  " Fecha de publicación: "
+            + video["publish_time"]+" views: " + video["views"]  + " likes: "+video["likes"] +" dislikes: " +video["dislikes"])
+
 """
 Menu principal
 """
@@ -69,7 +81,11 @@ while True:
         print('Paises cargados: ' + str(lt.size(catalog['paises'])))
 
     elif int(inputs[0]) == 2:
-        pass
+        numeroT=int(input("¿Que tan grande quiere que sea el top? "))
+        categoria= input("Indique la categoria que desea analizar: ").lower()
+        print("Cargando videos con más views ....")
+        result = controller.sortLikes(catalog,categoria)
+        printResults(result)
 
     else:
         sys.exit(0)
