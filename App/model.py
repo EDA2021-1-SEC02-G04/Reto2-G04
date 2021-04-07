@@ -50,11 +50,11 @@ def newCatalog():
                'categorias': None,'paises': None, 'trending':None}
 
     catalog['videos'] = lt.newList(datastructure="ARRAY_LIST")
-    catalog['categorias'] = mp.newMap(100,maptype="CHAINING",loadfactor=4)
-    catalog['paises'] = mp.newMap(15,maptype="CHAINING",loadfactor=4)
-    catalog['trending'] = mp.newMap(1000,maptype="CHAINING",loadfactor=4)
-    catalog['id'] = mp.newMap(100,maptype="CHAINING",loadfactor=4)
-    catalog["traduccion"]=mp.newMap(100,maptype="CHAINING",loadfactor=4)
+    catalog['categorias'] = mp.newMap(100,maptype="PROBING",loadfactor=0.5)
+    catalog['paises'] = mp.newMap(15,maptype="PROBING",loadfactor=0.5)
+    catalog['trending'] = mp.newMap(1000,maptype="PROBING",loadfactor=0.5)
+    catalog['id'] = mp.newMap(100,maptype="PROBING",loadfactor=0.5)
+    catalog["traduccion"]=mp.newMap(100,maptype="PROBING",loadfactor=0.5)
     return catalog
 
 

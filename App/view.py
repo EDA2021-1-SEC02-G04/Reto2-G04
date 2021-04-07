@@ -81,6 +81,7 @@ while True:
         print('Paises cargados: ' + str(lt.size(catalog['paises'])))
         print("Tiempo [ms]: ", f"{answer[0]:.3f}", "  ||  ",
               "Memoria [kB]: ", f"{answer[1]:.3f}")
+
     elif int(inputs[0]) == 2:
         numeroT=int(input("¿Que tan grande quiere que sea el top? "))
         categoria= input("Indique la categoria que desea analizar: ").lower()
