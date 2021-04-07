@@ -75,11 +75,12 @@ while True:
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         catalog = initCatalog()
-        loadData(catalog)
+        answer=controller.loadData(catalog)
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
         print('Categorias cargadas: ' + str(lt.size(catalog['categorias'])))
         print('Paises cargados: ' + str(lt.size(catalog['paises'])))
-
+        print("Tiempo [ms]: ", f"{answer[0]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{answer[1]:.3f}")
     elif int(inputs[0]) == 2:
         numeroT=int(input("¿Que tan grande quiere que sea el top? "))
         categoria= input("Indique la categoria que desea analizar: ").lower()
