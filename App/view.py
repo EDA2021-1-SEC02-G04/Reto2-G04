@@ -38,7 +38,7 @@ def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
     print("2- Los videos con más likes por categoria")
-
+    print("3- Videos con más views en un pais y categoria")
 
 def initCatalog():
     """
@@ -55,7 +55,7 @@ def loadData(catalog):
     controller.loadData(catalog)
 
 
-def printResults(videos, sample):
+def printResultslike(videos, sample):
     size = lt.size(videos)
     if size > sample:
         print("Los ", sample, " videos con más views son:")
@@ -66,6 +66,7 @@ def printResults(videos, sample):
             + video["channel_title"]+  " Fecha de publicación: "
             + video["publish_time"]+" views: " + video["views"]  + " likes: "+video["likes"] +" dislikes: " +video["dislikes"])
             i+=1
+            
 """
 Menu principal
 """
@@ -87,7 +88,8 @@ while True:
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando videos con más views ....")
         result = controller.sortLikes(catalog,categoria)
-        printResults(result,numeroT)
+        printResultlike(result,numeroT)
+
 
     else:
         sys.exit(0)

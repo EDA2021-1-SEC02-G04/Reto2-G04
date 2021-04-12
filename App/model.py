@@ -73,7 +73,7 @@ def addVideo(catalog, video):
         addPaisVideo(catalog, pais.strip(), video)
     for categoria in categorias:
         tr=traduccion(categoria.strip(),catalog)
-        addCategoriaVideo(catalog, tr, video)
+        addCategoriaVideo(catalog['categorias'], tr,categoria.strip(), video)
 
 def addListaCategorias(catalog, categoria):
     """
@@ -83,19 +83,22 @@ def addListaCategorias(catalog, categoria):
     mp.put(catalog['categorias'],categoria["name"].strip().lower(),cat)
     mp.put(catalog['traduccion'],categoria["id"],categoria["name"].strip().lower())
 
-def addCategoriaVideo(catalog, nombre_categoria,video):
+def addCategoriaVideo(catalog, nombre_categoria,id_cat,video):
     """
     Adiciona un categoria a la lista de categorias
     """
-    #cat = newCategoria(categoria['name'], categoria['id'])
-    #lt.addLast(catalog['categorias'], cat)
+
     
-    categorias_mapa = catalog['categorias']
+    categorias_mapa = catalog
     existecat = mp.contains(categorias_mapa, nombre_categoria)
     if existecat:
         pareja = mp.get(categorias_mapa, nombre_categoria)
         categoria=me.getValue(pareja)
         lt.addLast(categoria["videos"], video)
+    else:
+        cat = newCategoria(nombre_categoria, id_cat)
+        lt.addLast(cat["videos"], video)
+        mp.put(categorias_mapa, nombre_categoria,cat)
 
 def addPaisVideo(catalog, nombre_pais, video):
     """
@@ -103,13 +106,16 @@ def addPaisVideo(catalog, nombre_pais, video):
     a los videos de dicho pais
     """
     paises_mapa = catalog['paises']
-    existevid = mp.contains(paises_mapa,nombre_pais)
-    if existevid:
+    existepais = mp.contains(paises_mapa,nombre_pais)
+    tr=traduccion(video['category_id'].strip(),catalog)
+    if existepais:
         pareja = mp.get(paises_mapa, nombre_pais)
         pais=me.getValue(pareja)
+        addCategoriaVideo(pais['categorias'], tr,video['category_id'], video)
         lt.addLast(pais["videos"], video)
     else:
         pais = newPais(nombre_pais)
+        addCategoriaVideo(pais['categorias'], tr,video['category_id'], video)
         lt.addLast(pais["videos"], video)
         mp.put(paises_mapa, nombre_pais,pais)
 
@@ -146,7 +152,7 @@ def newPais(name):
     """
     pais = {'name': "", "categorias":None, "videos":None}
     pais['name'] = name.lower()
-    pais['categorias'] = lt.newList('ARRAY_LIST')
+    pais['categorias'] = mp.newMap(100,maptype="PROBING",loadfactor=0.5)
     pais['videos'] = lt.newList('ARRAY_LIST')
     return pais
 """
@@ -165,6 +171,9 @@ def newTrending(video,catalog):
     return trending
 """
 # Funciones de consulta
+
+
+
 def obtener_videos_categoria(catalog,categoria):
     posvideo = mp.contains(catalog['categorias'], categoria)
     
@@ -184,7 +193,12 @@ def cmpVideosByLikes(video1, video2):
         return True
     else:
         return False
-
+def cmpVideosByViews(video1, video2):
+    
+    if (float(video1['views']) > float(video2['views'])):
+        return True
+    else:
+        return False
 # Funciones de ordenamiento
 def sortLikes(catalog,categoria):
     
