@@ -39,6 +39,10 @@ def printMenu():
     print("1- Cargar información en el catálogo")
     print("2- Los videos con más likes por categoria")
     print("3- Videos con más views en un pais y categoria")
+    print("4- Video con mayor tiempo en trending de un pais")
+    print("5- Video que más dias ha sido trending en una categoria")
+    print("6- Videos con más likes en un pais con un tag en especifico")
+    print("0- Salir")
 
 def initCatalog():
     """
@@ -66,7 +70,7 @@ def printResultslike(videos, sample):
             + video["channel_title"]+  " Fecha de publicación: "
             + video["publish_time"]+" views: " + video["views"]  + " likes: "+video["likes"] +" dislikes: " +video["dislikes"])
             i+=1
-            
+
 """
 Menu principal
 """

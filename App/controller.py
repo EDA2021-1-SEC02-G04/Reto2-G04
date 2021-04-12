@@ -46,7 +46,7 @@ def loadData(catalog):
 
     loadCategorias(catalog)
     loadVideos(catalog)
-    
+    loadTrending(catalog)
     
     stop_memory = getMemory()
     stop_time = getTime()
@@ -65,12 +65,15 @@ def loadCategorias(catalog):
     input_file = csv.DictReader(open(categoriafile, encoding='utf-8'),delimiter='\t')
     for categoria in input_file:
         model.addListaCategorias(catalog, categoria)
+
 def loadVideos(catalog):
     videosfile = cf.data_dir + 'videos-large.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     for video in input_file:
         model.addVideo(catalog, video)
 
+def loadTrending(catalog):
+    model.trending_en_mapas(catalog)
 
 # Funciones de ordenamiento
 def sortLikes(catalog,categoria):

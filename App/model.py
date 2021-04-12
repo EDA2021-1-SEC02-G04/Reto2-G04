@@ -50,9 +50,11 @@ def newCatalog():
                'categorias': None,'paises': None, 'trending':None}
 
     catalog['videos'] = lt.newList(datastructure="ARRAY_LIST")
+    catalog['trending'] = mp.newMap(100,maptype="PROBING",loadfactor=0.5)
     catalog['categorias'] = mp.newMap(100,maptype="PROBING",loadfactor=0.5)
     catalog['paises'] = mp.newMap(15,maptype="PROBING",loadfactor=0.5)
-    catalog['trending'] = mp.newMap(1000,maptype="PROBING",loadfactor=0.5)
+    catalog['pais_trending'] = mp.newMap(1000,maptype="PROBING",loadfactor=0.5)
+    catalog['categoria_trending'] = mp.newMap(1000,maptype="PROBING",loadfactor=0.5)
     catalog['id'] = mp.newMap(100,maptype="PROBING",loadfactor=0.5)
     catalog["traduccion"]=mp.newMap(100,maptype="PROBING",loadfactor=0.5)
     return catalog
@@ -69,12 +71,20 @@ def addVideo(catalog, video):
     lt.addLast(catalog['videos'], video)
     paises = video['country'].split(",")
     categorias = video['category_id'].split(",")
-    for pais in paises:
-        addPaisVideo(catalog, pais.strip(), video)
+    addTrending(catalog['trending'],video)
     for categoria in categorias:
         tr=traduccion(categoria.strip(),catalog)
         addCategoriaVideo(catalog['categorias'], tr,categoria.strip(), video)
+    for pais in paises:
+        addPaisVideo(catalog['paises'], pais.strip(), video,tr)
 
+    
+def trending_en_mapas(catalog):
+    videos_trending=mp.valueSet(catalog['trending'])
+    for video in lt.iterator(videos_trending):
+        tr=traduccion(video['category_id'].strip(),catalog)
+        addPaisVideo(catalog['pais_trending'],  video['country'].strip(), video,tr)
+        addCategoriaVideo(catalog['categoria_trending'], tr,video['category_id'].strip(), video)
 def addListaCategorias(catalog, categoria):
     """
     Adiciona una categoria a la lista de categorias
@@ -100,14 +110,13 @@ def addCategoriaVideo(catalog, nombre_categoria,id_cat,video):
         lt.addLast(cat["videos"], video)
         mp.put(categorias_mapa, nombre_categoria,cat)
 
-def addPaisVideo(catalog, nombre_pais, video):
+def addPaisVideo(catalog, nombre_pais, video,tr):
     """
     Adiciona un pais a lista de paises, la cual guarda referencias
     a los videos de dicho pais
     """
-    paises_mapa = catalog['paises']
+    paises_mapa = catalog
     existepais = mp.contains(paises_mapa,nombre_pais)
-    tr=traduccion(video['category_id'].strip(),catalog)
     if existepais:
         pareja = mp.get(paises_mapa, nombre_pais)
         pais=me.getValue(pareja)
@@ -119,21 +128,20 @@ def addPaisVideo(catalog, nombre_pais, video):
         lt.addLast(pais["videos"], video)
         mp.put(paises_mapa, nombre_pais,pais)
 
-    
-"""
-def addTrending(trending_lista,video):
-    video
-    posvideo = lt.isPresent(trending_lista, video)
-    if posvideo > 0:
-        vid=lt.getElement(trending_lista, posvideo)
+def addTrending(trending_map,video):
+    video_nombre=video['title']
+    existe_video =  mp.contains(trending_map,video_nombre)
+    if existe_video:
+        pareja=mp.get(trending_map,video_nombre)
+        vid=me.getValue(pareja)
         dias=vid['trending']
         dias+=1
         vid['trending']=dias
-        lt.changeInfo(trending_lista,posvideo,vid)
+        mp.put(trending_map,video_nombre,vid)
     else:
-        trending = newTrending(video,trending_lista)
-        lt.addLast(trending_lista, trending)
-"""
+        trending = newTrending(video)
+        mp.put(trending_map,video_nombre, trending)
+
 # Funciones para creacion de datos
 def newCategoria(name, id):
     """
@@ -155,6 +163,17 @@ def newPais(name):
     pais['categorias'] = mp.newMap(100,maptype="PROBING",loadfactor=0.5)
     pais['videos'] = lt.newList('ARRAY_LIST')
     return pais
+
+def newTrending(video):
+
+    trending = {'id':None, 'name': None, 'channel':None, "categoria":None, 'pais': None, "trending":None}
+    trending['video_id']=video['video_id']
+    trending['title'] = video['title']
+    trending['channel_title'] = video['channel_title']
+    trending['category_id'] = video['category_id']
+    trending['country'] = video['country']
+    trending['trending']=1
+    return trending
 """
 def newTrending(video,catalog):
     
@@ -199,6 +218,11 @@ def cmpVideosByViews(video1, video2):
         return True
     else:
         return False
+
+def comparetrending(trending1, trending2):
+    if (trending1['title'].strip() == trending2['name'].strip()):
+        return 0
+    return -1
 # Funciones de ordenamiento
 def sortLikes(catalog,categoria):
     
