@@ -229,6 +229,13 @@ def comparetrending(trending1, trending2):
     if (trending1['title'].strip() == trending2['name'].strip()):
         return 0
     return -1
+
+def cmpVideosByTrending(video1, video2):
+    
+    if (float(video1['trending']) > float(video2['trending'])):
+        return True
+    else:
+        return False
 # Funciones de ordenamiento
 def sortLikes(catalog,categoria):
     
@@ -260,5 +267,15 @@ def sortVideos(catalog,nombre_pais,categoria):
     tamaño=lt.size(lista_ordenar)
     sub_list = lt.subList(lista_ordenar, 1, tamaño)
     sub_list = sub_list.copy()
-    sorted_list = ms.sort(lista_ordenar, cmpVideosByViews)
+    sorted_list = ms.sort(sub_list, cmpVideosByViews)
+    return sorted_list
+
+def trending_categoria(catalog,categoria):
+    categorias_map=catalog['categoria_trending']
+    cat=mp.get(categorias_map,categoria)
+    lista_videos=me.getValue(cat)['videos']
+    tamaño=lt.size(lista_videos)
+    sub_list = lt.subList(lista_videos, 1, tamaño)
+    sub_list = sub_list.copy()
+    sorted_list = ms.sort(sub_list, cmpVideosByTrending)
     return sorted_list

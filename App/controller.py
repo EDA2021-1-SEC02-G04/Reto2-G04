@@ -116,6 +116,8 @@ def sort_con_tags(tag,catalog,pais):
     return (delta_time,delta_memory,respuesta)
 
 # Funciones de consulta sobre el catálogo
+def trending_categoria(catalog,categoria):
+    return model.trending_categoria(catalog,categoria)
 # Funciones de tiempo y memoria
 
 def getTime():

@@ -92,6 +92,12 @@ def printTags(videos, sample):
             + video["channel_title"]+  " Fecha de publicación: "
             + video["publish_time"]+" views: " + video["views"]  + " likes: "+video["likes"] +" dislikes: " +video["dislikes"]+" Tags:: " +video["tags"]+" Pais: "+video["country"])
             i+=1
+            
+def print_categoria_trending(result):
+    video=lt.getElement(result,1)
+    print('Titulo: ' + video['title'] + " Canal: "
+            + video["channel_title"]+  " Categoria_id: "
+            + str(video['category_id'])+" Días Trending: " + str(video["trending"])+" Pais: "+video['country'])
 """
 Menu principal
 """
@@ -119,10 +125,16 @@ while True:
         pais= input("Indique el pais que desea analizar: ").lower()
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando videos con más views ....")
-       answer = controller.sortVideos(catalog,pais,categoria)
+        answer = controller.sortVideos(catalog,pais,categoria)
         printResults(answer[0],numeroT)
         print("Tiempo [ms]: ", f"{answer[1]:.3f}", "  ||  ",
               "Memoria [kB]: ", f"{answer[2]:.3f}")
+    elif int(inputs[0]) == 5:
+        categoria= input("Indique la categoria que desea analizar: ").lower()
+        print("Cargando video con más dias en trending en una categoria ....")
+        result = controller.trending_categoria(catalog,categoria)
+        print_categoria_trending(result)
+
     elif int(inputs[0]) == 6:
         print("Cargando videos con más likes de un tag en especifico ....")
         tag=input("Indique el tag: ")
