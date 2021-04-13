@@ -119,7 +119,7 @@ while True:
         pais= input("Indique el pais que desea analizar: ").lower()
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando videos con más views ....")
-        answer = controller.sortVideos(catalog,pais,categoria)
+       answer = controller.sortVideos(catalog,pais,categoria)
         printResults(answer[0],numeroT)
         print("Tiempo [ms]: ", f"{answer[1]:.3f}", "  ||  ",
               "Memoria [kB]: ", f"{answer[2]:.3f}")
@@ -127,9 +127,12 @@ while True:
         print("Cargando videos con más likes de un tag en especifico ....")
         tag=input("Indique el tag: ")
         pais= input("Indique el pais que desea analizar: ").lower()
-        result=controller.sort_con_tags(tag,catalog,pais)
+        answer=controller.sort_con_tags(tag,catalog,pais)
         numeroT=int(input("¿Que tan grande quiere que sea el top? "))
-        printTags(result,numeroT)
+        print("Tiempo [ms]: ", f"{answer[0]:.3f}", "  ||  ",
+         "Memoria [kB]: ", f"{answer[1]:.3f}")
+        printTags(answer[2],numeroT)
+        
     else:
         sys.exit(0)
 sys.exit(0)
