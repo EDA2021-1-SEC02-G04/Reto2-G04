@@ -83,6 +83,8 @@ def sortVideos(catalog,pais,categoria):
     Ordena los videos por average_rating
     """
     return model.sortVideos(catalog,pais,categoria)
+def sort_con_tags(tag,catalog,pais):
+    return model.sort_con_tags(tag,catalog,pais)
 # Funciones de consulta sobre el catálogo
 # Funciones de tiempo y memoria
 

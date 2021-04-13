@@ -192,6 +192,12 @@ def newTrending(video,catalog):
 # Funciones de consulta
 
 
+def tags_en_lista(tag,lista,catalog):
+    nueva_lista=lt.newList(datastructure='ARRAY_LIST',cmpfunction=cmpVideosByLikes)
+    for video in lt.iterator(lista):
+        if tag in video["tags"]:
+            lt.addLast(nueva_lista,video)
+    return nueva_lista
 
 def obtener_videos_categoria(catalog,categoria):
     posvideo = mp.contains(catalog['categorias'], categoria)
@@ -231,6 +237,16 @@ def sortLikes(catalog,categoria):
     lista_categoria=categorias['videos']
     
     sorted_list = ms.sort(lista_categoria, cmpVideosByLikes)
+    return sorted_list
+
+def sort_con_tags(tag,catalog,nombre_pais):
+    
+    pais=catalog['paises']
+    prelistap=mp.get(pais,nombre_pais)
+    listap=me.getValue(prelistap)
+    lista_pais=listap['videos']
+    lista_tags=tags_en_lista(tag,lista_pais,catalog)
+    sorted_list = ms.sort(lista_tags, cmpVideosByLikes)
     return sorted_list
 
 def sortVideos(catalog,nombre_pais,categoria):

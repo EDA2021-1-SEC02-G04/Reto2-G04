@@ -81,7 +81,17 @@ def printResults(videos, sample):
             + video["channel_title"]+  " Fecha de publicación: "
             + video["publish_time"]+" views: " + video["views"]  + " likes: "+video["likes"] +" dislikes: " +video["dislikes"])
             i+=1
-
+def printTags(videos, sample):
+    size = lt.size(videos)
+    if size > sample:
+        print("Los ", sample, " videos con más likes son:")
+        i=1
+        while i <= sample:
+            video = lt.getElement(videos,i)
+            print(' Titulo: ' + video['title'] + " Canal: "
+            + video["channel_title"]+  " Fecha de publicación: "
+            + video["publish_time"]+" views: " + video["views"]  + " likes: "+video["likes"] +" dislikes: " +video["dislikes"]+" Tags:: " +video["tags"]+" Pais: "+video["country"])
+            i+=1
 """
 Menu principal
 """
@@ -111,7 +121,13 @@ while True:
         print("Cargando videos con más views ....")
         result = controller.sortVideos(catalog,pais,categoria)
         printResults(result,numeroT)
-
+    elif int(inputs[0]) == 6:
+        print("Cargando videos con más likes de un tag en especifico ....")
+        tag=input("Indique el tag: ")
+        pais= input("Indique el pais que desea analizar: ").lower()
+        result=controller.sort_con_tags(tag,catalog,pais)
+        numeroT=int(input("¿Que tan grande quiere que sea el top? "))
+        printTags(result,numeroT)
     else:
         sys.exit(0)
 sys.exit(0)
