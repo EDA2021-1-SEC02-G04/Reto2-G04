@@ -232,3 +232,17 @@ def sortLikes(catalog,categoria):
     
     sorted_list = ms.sort(lista_categoria, cmpVideosByLikes)
     return sorted_list
+
+def sortVideos(catalog,nombre_pais,categoria):
+    pais=catalog['paises']
+    filtro_uno=mp.get(pais,nombre_pais)
+    filtro_unovalue=me.getValue(filtro_uno)
+    filtro_dos=filtro_unovalue["categorias"]
+    filtro_tres=mp.get(filtro_dos,categoria)
+    filtro_tresvalue=me.getValue(filtro_tres)
+    lista_ordenar=filtro_tresvalue['videos']
+    tamaño=lt.size(lista_ordenar)
+    sub_list = lt.subList(lista_ordenar, 1, tamaño)
+    sub_list = sub_list.copy()
+    sorted_list = ms.sort(lista_ordenar, cmpVideosByViews)
+    return sorted_list

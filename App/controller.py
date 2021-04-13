@@ -67,7 +67,7 @@ def loadCategorias(catalog):
         model.addListaCategorias(catalog, categoria)
 
 def loadVideos(catalog):
-    videosfile = cf.data_dir + 'videos-large.csv'
+    videosfile = cf.data_dir + 'videos-small.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     for video in input_file:
         model.addVideo(catalog, video)
@@ -78,6 +78,11 @@ def loadTrending(catalog):
 # Funciones de ordenamiento
 def sortLikes(catalog,categoria):
     return model.sortLikes(catalog,categoria)
+def sortVideos(catalog,pais,categoria):
+    """
+    Ordena los videos por average_rating
+    """
+    return model.sortVideos(catalog,pais,categoria)
 # Funciones de consulta sobre el catálogo
 # Funciones de tiempo y memoria
 
