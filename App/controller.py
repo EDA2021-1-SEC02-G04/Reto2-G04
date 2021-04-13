@@ -67,7 +67,7 @@ def loadCategorias(catalog):
         model.addListaCategorias(catalog, categoria)
 
 def loadVideos(catalog):
-    videosfile = cf.data_dir + 'videos-small.csv'
+    videosfile = cf.data_dir + 'videos-large.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     for video in input_file:
         model.addVideo(catalog, video)
@@ -84,7 +84,22 @@ def sortVideos(catalog,pais,categoria):
     """
     return model.sortVideos(catalog,pais,categoria)
 def sort_con_tags(tag,catalog,pais):
-    return model.sort_con_tags(tag,catalog,pais)
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+    respuesta=model.sort_con_tags(tag,catalog,pais)
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+    
+    return (delta_time,delta_memory,respuesta)
+
 # Funciones de consulta sobre el catálogo
 # Funciones de tiempo y memoria
 
