@@ -82,7 +82,22 @@ def sortVideos(catalog,pais,categoria):
     """
     Ordena los videos por average_rating
     """
-    return model.sortVideos(catalog,pais,categoria)
+
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+
+    u= model.sortVideos(catalog,pais,categoria)
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+    return (u,delta_time,delta_memory)
 def sort_con_tags(tag,catalog,pais):
     return model.sort_con_tags(tag,catalog,pais)
 # Funciones de consulta sobre el catálogo

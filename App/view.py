@@ -119,8 +119,10 @@ while True:
         pais= input("Indique el pais que desea analizar: ").lower()
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando videos con más views ....")
-        result = controller.sortVideos(catalog,pais,categoria)
-        printResults(result,numeroT)
+        answer = controller.sortVideos(catalog,pais,categoria)
+        printResults(answer[0],numeroT)
+        print("Tiempo [ms]: ", f"{answer[1]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{answer[2]:.3f}")
     elif int(inputs[0]) == 6:
         print("Cargando videos con más likes de un tag en especifico ....")
         tag=input("Indique el tag: ")
