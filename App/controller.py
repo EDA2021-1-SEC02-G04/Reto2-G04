@@ -117,7 +117,20 @@ def sort_con_tags(tag,catalog,pais):
 
 # Funciones de consulta sobre el catálogo
 def trending_categoria(catalog,categoria):
-    return model.trending_categoria(catalog,categoria)
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+    respuesta=model.trending_categoria(catalog,categoria)
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+    return (delta_time,delta_memory,respuesta
 # Funciones de tiempo y memoria
 
 def getTime():
