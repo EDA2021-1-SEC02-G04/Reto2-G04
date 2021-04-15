@@ -126,14 +126,16 @@ while True:
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando videos con más views ....")
         answer = controller.sortVideos(catalog,pais,categoria)
-        printResults(answer[0],numeroT)
-        print("Tiempo [ms]: ", f"{answer[1]:.3f}", "  ||  ",
-              "Memoria [kB]: ", f"{answer[2]:.3f}")
+        printResults(answer[2],numeroT)
+        print("Tiempo [ms]: ", f"{answer[0]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{answer[1]:.3f}")
     elif int(inputs[0]) == 5:
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando video con más dias en trending en una categoria ....")
         result = controller.trending_categoria(catalog,categoria)
-        print_categoria_trending(result)
+        print_categoria_trending(result[2])
+        print("Tiempo [ms]: ", f"{result[0]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{result[1]:.3f}")
 
     elif int(inputs[0]) == 6:
         print("Cargando videos con más likes de un tag en especifico ....")

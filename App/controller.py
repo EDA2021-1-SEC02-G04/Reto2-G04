@@ -130,7 +130,7 @@ def trending_categoria(catalog,categoria):
 
     delta_time = stop_time - start_time
     delta_memory = deltaMemory(start_memory, stop_memory)
-    return (delta_time,delta_memory,respuesta
+    return (delta_time,delta_memory,respuesta)
 # Funciones de tiempo y memoria
 
 def getTime():
