@@ -98,6 +98,8 @@ def print_categoria_trending(result):
     print('Titulo: ' + video['title'] + " Canal: "
             + video["channel_title"]+  " Categoria_id: "
             + str(video['category_id'])+" Días Trending: " + str(video["trending"])+" Pais: "+video['country'])
+
+
 """
 Menu principal
 """
@@ -134,13 +136,15 @@ while True:
         print("Cargando video con más dias en trending en un pais ....")
         result = controller.trending_pais(catalog,pais)
         print_categoria_trending(result[2])
-
-
+        print("Tiempo [ms]: ", f"{result[0]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{result[1]:.3f}")
     elif int(inputs[0]) == 5:
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando video con más dias en trending en una categoria ....")
         result = controller.trending_categoria(catalog,categoria)
         print_categoria_trending(result[2])
+        print("Tiempo [ms]: ", f"{result[0]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{result[1]:.3f}")
 
     elif int(inputs[0]) == 6:
         print("Cargando videos con más likes de un tag en especifico ....")
