@@ -129,11 +129,18 @@ while True:
         printResults(answer[0],numeroT)
         print("Tiempo [ms]: ", f"{answer[1]:.3f}", "  ||  ",
               "Memoria [kB]: ", f"{answer[2]:.3f}")
+    elif int(inputs[0]) == 4:
+        pais= input("Indique el pais que desea analizar: ").lower()
+        print("Cargando video con más dias en trending en un pais ....")
+        result = controller.trending_pais(catalog,pais)
+        print_categoria_trending(result[2])
+
+
     elif int(inputs[0]) == 5:
         categoria= input("Indique la categoria que desea analizar: ").lower()
         print("Cargando video con más dias en trending en una categoria ....")
         result = controller.trending_categoria(catalog,categoria)
-        print_categoria_trending(result)
+        print_categoria_trending(result[2])
 
     elif int(inputs[0]) == 6:
         print("Cargando videos con más likes de un tag en especifico ....")

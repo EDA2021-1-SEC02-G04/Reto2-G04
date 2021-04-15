@@ -67,7 +67,7 @@ def loadCategorias(catalog):
         model.addListaCategorias(catalog, categoria)
 
 def loadVideos(catalog):
-    videosfile = cf.data_dir + 'videos-large.csv'
+    videosfile = cf.data_dir + 'videos-small.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     for video in input_file:
         model.addVideo(catalog, video)
@@ -130,7 +130,26 @@ def trending_categoria(catalog,categoria):
 
     delta_time = stop_time - start_time
     delta_memory = deltaMemory(start_memory, stop_memory)
-    return (delta_time,delta_memory,respuesta
+    return (delta_time,delta_memory,respuesta)
+
+
+def trending_pais(catalog,pais):
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+    respuesta=model.trending_pais(catalog,pais)
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+    return (delta_time,delta_memory,respuesta)
+
+    
 # Funciones de tiempo y memoria
 
 def getTime():

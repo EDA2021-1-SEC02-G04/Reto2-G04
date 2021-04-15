@@ -279,3 +279,13 @@ def trending_categoria(catalog,categoria):
     sub_list = sub_list.copy()
     sorted_list = ms.sort(sub_list, cmpVideosByTrending)
     return sorted_list
+
+def trending_pais(catalog,pais):
+    pai = catalog['pais_trending']
+    pa=mp.get(pai,pais)
+    lista_videos=me.getValue(pa)['videos']
+    tamaño=lt.size(lista_videos)
+    sub_list = lt.subList(lista_videos, 1, tamaño)
+    sub_list = sub_list.copy()
+    sorted_list = ms.sort(sub_list, cmpVideosByTrending)
+    return sorted_list
